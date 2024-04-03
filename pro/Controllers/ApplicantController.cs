@@ -136,28 +136,7 @@ namespace pro.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpGet("all")]
-        public async Task<ActionResult<IEnumerable<Applicant>>> GetAllApplicants()
-        {
-            try
-            {
-                var applicants = await _context.Applicants.ToListAsync();
-
-                if (applicants == null || applicants.Count == 0)
-                {
-                    return NotFound("No applicants found.");
-                }
-
-                return Ok(applicants);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, "Internal server error");
-            }
-        }
-
-
+        
 
     }
 }

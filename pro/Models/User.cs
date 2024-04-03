@@ -5,17 +5,17 @@ using System.Collections.Generic;
 
 namespace pro.Models
 {
-    public class User:IdentityUser
+    public class User : IdentityUser
     {
         [Required]
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
-       
-         public Applicant Applicant { get; set; }
-         public JobApplication JobApplication { get; set; }
-         public Acknowledgment Acknowledgment { get; set; }
+
+        public Applicant Applicant { get; set; }
+        public JobApplication JobApplication { get; set; }
+        public Acknowledgment Acknowledgment { get; set; }
         public List<Education> Educations { get; set; }
         public List<Resume> Resumes { get; set; }
         public List<SkillUser> SkillUsers { get; set; }
@@ -23,7 +23,7 @@ namespace pro.Models
 
         public Company Company { get; set; }
 
-          public List<FileUploadResponse> FileUploadResponses { get; set; } 
+        public List<FileUploadResponse> FileUploadResponses { get; set; }
 
     }
 }

@@ -101,46 +101,7 @@ namespace pro.Controllers
             return Ok(newEducation);
         }
 
-        [HttpGet("user-details")]
-        [Authorize]
-        public async Task<ActionResult<UserDetails>> GetUserDetails()
-        {
-            try
-            {
-                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                var user = await _userManager.FindByIdAsync(userId);
-
-                if (user == null)
-                {
-                    return NotFound("User not found.");
-                }
-
-                var userDetails = new UserDetails
-                {
-                    UserId = userId,
-                    UserName = user.UserName,
-                    // Fetch education details
-                    Education = await _context.Educations.FirstOrDefaultAsync(e => e.UserId == userId),
-                    // Fetch skill details
-                    Skills = await _context.SkillUsers
-                        .Where(s => s.UserId == userId)
-                        .Select(s => s.Skill)
-                        .ToListAsync(),
-                    Department = await _context.DepartmentUsers
-                        .Where(d => d.UserId == userId)
-                        .Select(d => d.Department)
-                        .FirstOrDefaultAsync()
-                };
-
-                return Ok(userDetails);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred while fetching user details.");
-                return StatusCode(500, "Internal server error");
-            }
-        }
-
+    
         private List<int> GetSkillIdsByNames(List<int> skillNames)
         {
             return _context.Skills

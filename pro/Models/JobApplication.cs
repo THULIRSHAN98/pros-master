@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -24,6 +25,16 @@ namespace pro.Models
 
         [JsonIgnore]
         public User User { get; set; }
+
+        internal JobApplication FirstOrDefault()
+        {
+            throw new NotImplementedException();
+        }
+
+        public static implicit operator JobApplication(List<JobApplication> v)
+        {
+            throw new NotImplementedException();
+        }
     }
 
    
