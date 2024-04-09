@@ -11,6 +11,8 @@ namespace pro.Models
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
+        [Required]
+        public string Status { get; set; }
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
 
         public Applicant Applicant { get; set; }

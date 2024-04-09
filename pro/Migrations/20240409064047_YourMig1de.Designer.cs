@@ -12,8 +12,8 @@ using pro.Data;
 namespace pro.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20240307101654_thulir")]
-    partial class thulir
+    [Migration("20240409064047_YourMig1de")]
+    partial class YourMig1de
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -171,39 +171,6 @@ namespace pro.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("YourNamespace.Models.FileUploadResponse", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ContentType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FilePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("FileSize")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("FileUploadResponses");
                 });
 
             modelBuilder.Entity("pro.Models.Acknowledgment", b =>
@@ -419,6 +386,42 @@ namespace pro.Migrations
                     b.ToTable("Experiences");
                 });
 
+            modelBuilder.Entity("pro.Models.FileUploadResponse", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ContentType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("PositionId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("FileUploadResponses");
+                });
+
             modelBuilder.Entity("pro.Models.JobApplication", b =>
                 {
                     b.Property<int>("AppId")
@@ -439,17 +442,41 @@ namespace pro.Migrations
                     b.Property<string>("Source")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("StartDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("StartDate")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("AppId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("JobApplications");
+                });
+
+            modelBuilder.Entity("pro.Models.Position", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("PositionName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Positions");
                 });
 
             modelBuilder.Entity("pro.Models.Resume", b =>
@@ -582,6 +609,9 @@ namespace pro.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -672,15 +702,6 @@ namespace pro.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("YourNamespace.Models.FileUploadResponse", b =>
-                {
-                    b.HasOne("pro.Models.User", "User")
-                        .WithMany("FileUploadResponses")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("pro.Models.Acknowledgment", b =>
                 {
                     b.HasOne("pro.Models.User", "User")
@@ -726,10 +747,28 @@ namespace pro.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("pro.Models.FileUploadResponse", b =>
+                {
+                    b.HasOne("pro.Models.User", "User")
+                        .WithMany("FileUploadResponses")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("pro.Models.JobApplication", b =>
                 {
                     b.HasOne("pro.Models.User", "User")
-                        .WithMany("JobApplications")
+                        .WithOne("JobApplication")
+                        .HasForeignKey("pro.Models.JobApplication", "UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("pro.Models.Position", b =>
+                {
+                    b.HasOne("pro.Models.User", "User")
+                        .WithMany()
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
@@ -787,7 +826,7 @@ namespace pro.Migrations
 
                     b.Navigation("FileUploadResponses");
 
-                    b.Navigation("JobApplications");
+                    b.Navigation("JobApplication");
 
                     b.Navigation("Resumes");
 

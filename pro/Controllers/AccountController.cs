@@ -111,7 +111,8 @@ namespace pro.Controllers
                 LastName = model.LastName.ToLower(),
                 UserName = model.Email.ToLower(),
                 Email = model.Email.ToLower(),
-                EmailConfirmed = true // Set email confirmed flag to true
+                EmailConfirmed = true ,// Set email confirmed flag to true
+                Status = model.Status
             };
 
             // creates a user inside our AspNetUsers table inside our database

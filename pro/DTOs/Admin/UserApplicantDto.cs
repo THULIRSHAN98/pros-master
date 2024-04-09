@@ -8,5 +8,6 @@ public class UserApplicantDto
     public string UserName { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
+    public string Status { get; set; }
     public Applicant Applicant { get; set; }
 }

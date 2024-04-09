@@ -25,6 +25,8 @@ namespace pro.Data
         public DbSet<SkillUser> SkillUsers { get; set; }
         public DbSet<FileUploadResponse> FileUploadResponses { get; set; }
 
+        public DbSet<Position> Positions { get; set;}
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

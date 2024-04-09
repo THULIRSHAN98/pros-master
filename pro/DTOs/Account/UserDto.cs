@@ -6,5 +6,7 @@
         public string LastName { get; set; }
         public string JWT { get; set; }
 
+        public string Status { get; set; }
+
     }
 }

@@ -60,6 +60,7 @@ namespace pro.Controllers
                     FilePath = fileUploadRequest.FilePath,
                     FileSize = fileUploadRequest.FileSize,
                     ContentType = fileUploadRequest.ContentType,
+                    Status = fileUploadRequest.Status, // Set the status based on user input
                     User = user // Assign the user to the file upload response
                 };
 
@@ -69,6 +70,28 @@ namespace pro.Controllers
                 await _context.SaveChangesAsync();
 
                 return Ok(newFileUploadResponse);
+            }
+            catch (Exception ex)
+            {
+                // Log error
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+
+        [HttpGet("file")]
+        public async Task<ActionResult<FileUploadResponse>> GetFile()
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var fileUploadResponse = await _context.FileUploadResponses.FirstOrDefaultAsync(f => f.UserId == userId);
+
+                if (fileUploadResponse == null)
+                {
+                    return NotFound("No file uploaded for the user.");
+                }
+
+                return Ok(fileUploadResponse);
             }
             catch (Exception ex)
             {

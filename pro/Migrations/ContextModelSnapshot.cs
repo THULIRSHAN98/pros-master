@@ -403,6 +403,12 @@ namespace pro.Migrations
                     b.Property<long>("FileSize")
                         .HasColumnType("bigint");
 
+                    b.Property<int>("PositionId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
@@ -446,6 +452,28 @@ namespace pro.Migrations
                         .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("JobApplications");
+                });
+
+            modelBuilder.Entity("pro.Models.Position", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("PositionName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Positions");
                 });
 
             modelBuilder.Entity("pro.Models.Resume", b =>
@@ -576,6 +604,10 @@ namespace pro.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -727,6 +759,15 @@ namespace pro.Migrations
                     b.HasOne("pro.Models.User", "User")
                         .WithOne("JobApplication")
                         .HasForeignKey("pro.Models.JobApplication", "UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("pro.Models.Position", b =>
+                {
+                    b.HasOne("pro.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });

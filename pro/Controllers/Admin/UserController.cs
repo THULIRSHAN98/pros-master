@@ -30,9 +30,9 @@ namespace pro.Controllers
                 .Include(u => u.Acknowledgment)
                 .Include(u => u.Educations)
                 .Include(u => u.SkillUsers)
-                .ThenInclude(su => su.Skill) // Include Skill entity in SkillUsers
+                .ThenInclude(su => su.Skill)
                 .Include(u => u.DepartmentUsers)
-                .ThenInclude(du => du.Department) // Include Department entity in DepartmentUsers
+                .ThenInclude(du => du.Department)
                 .Include(u => u.Company)
                 .Include(u => u.FileUploadResponses)
                 .ToListAsync();
@@ -44,10 +44,11 @@ namespace pro.Controllers
                 user.FirstName,
                 user.LastName,
                 user.DateCreated,
-                ApplicantDetails = user.Applicant, // Assuming Applicant is a navigation property in User
-                JobApplicationDetails = user.JobApplication, // Assuming JobApplication is a navigation property in User
-                AcknowledgmentDetails = user.Acknowledgment, // Assuming Acknowledgment is a navigation property in User
-                Educations = user.Educations, // Assuming Educations is a navigation property in User
+                user.Status,
+                ApplicantDetails = user.Applicant,
+                JobApplicationDetails = user.JobApplication,
+                AcknowledgmentDetails = user.Acknowledgment,
+                Educations = user.Educations,
                 SkillDetails = user.SkillUsers.Select(skillUser => new
                 {
                     SkillName = skillUser.Skill?.SkillName,
@@ -56,14 +57,15 @@ namespace pro.Controllers
                 DepartmentDetails = user.DepartmentUsers.Select(du => new
                 {
                     DepartmentId = du.DepartmentID,
-                    DepartmentName = du.Department?.DepartmentName // Assuming DepartmentName is a property in Department
+                    DepartmentName = du.Department?.DepartmentName
                 }),
-                CompanyDetails = user.Company, // Assuming Company is a navigation property in User
-                FileUploadResponses = user.FileUploadResponses // Assuming FileUploadResponses is a navigation property in User
+                CompanyDetails = user.Company,
+                FileUploadResponses = user.FileUploadResponses,
             });
 
             return Ok(userDetails);
         }
 
+    
     }
 }

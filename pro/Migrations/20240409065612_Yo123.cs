@@ -5,7 +5,7 @@
 namespace pro.Migrations
 {
     /// <inheritdoc />
-    public partial class thulir : Migration
+    public partial class Yo123 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
