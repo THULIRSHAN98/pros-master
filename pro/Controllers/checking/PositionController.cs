@@ -62,5 +62,24 @@ namespace pro.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Position>>> GetAllPositions()
+        {
+            try
+            {
+                var positions = await _context.Positions.ToListAsync();
+
+                if (positions == null || positions.Count == 0)
+                {
+                    return NotFound("No positions found.");
+                }
+
+                return Ok(positions);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
     }
 }
