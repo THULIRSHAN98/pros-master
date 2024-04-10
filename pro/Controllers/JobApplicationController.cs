@@ -38,7 +38,6 @@ namespace pro.Controllers
             }
 
             // Remove any existing job applications for the user
-            // Remove any existing job applications for the user
             var existingJobApplications = await _context.JobApplications.Where(j => j.UserId == userId).ToListAsync();
             foreach (var existingJobApplication in existingJobApplications)
             {

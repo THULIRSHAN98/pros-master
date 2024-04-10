@@ -16,9 +16,8 @@ namespace pro.Controllers
     [Route("api/[controller]")]
     public class ApplicantController : ControllerBase
     {
-        private readonly Context _context; //database access
-        private readonly UserManager<User> _userManager; //register user
-
+        private readonly Context _context; 
+        private readonly UserManager<User> _userManager;
         public ApplicantController(Context context, UserManager<User> userManager)
         {
             _context = context;
@@ -39,7 +38,6 @@ namespace pro.Controllers
                     return NotFound("User not found.");
                 }
 
-                // Find existing applicant data associated with the user
                 var existingApplicant = await _context.Applicants.FirstOrDefaultAsync(a => a.UserId == userId);
 
                 if (existingApplicant != null)
@@ -64,7 +62,6 @@ namespace pro.Controllers
                     Country = applicantDto.Country,
                 };
 
-                // Add new applicant data
                 _context.Applicants.Add(newApplicant);
 
                 await _context.SaveChangesAsync();

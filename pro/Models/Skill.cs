@@ -17,7 +17,5 @@ namespace pro.Models
 
         public List<SkillUser> SkillUsers { get; set; }
 
-
-
     }
 }

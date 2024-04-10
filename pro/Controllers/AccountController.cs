@@ -254,6 +254,29 @@ namespace pro.Controllers
             }
         }
 
+        [HttpPost("send-message/{userId}")]
+        public async Task<IActionResult> SendMessageToUser(string userId, [FromBody] MessageDto messageDto)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            try
+            {
+                var emailSend = new EmailSendDto(user.Email, messageDto.Subject, messageDto.Content);
+                await _emailService.SendEmailAsync(emailSend);
+
+                return Ok(new { message = "Message sent successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
         #region Private Helper Methods
         private async Task<UserDto> CreateApplicationUserDto(User user)
         {
