@@ -9,6 +9,7 @@ using pro.Data;
 using pro.Models;
 using pro.DTOs;
 using Microsoft.EntityFrameworkCore;
+using pro.DTOs;
 
 namespace pro.Controllers
 {
@@ -102,7 +103,7 @@ namespace pro.Controllers
 
         [Authorize]
         [HttpPut("{id}/status")]
-        public async Task<ActionResult> UpdateStatus(int id, UpdateStatusDto statusDto)
+        public async Task<ActionResult> UpdateStatus(int id, UpdateStatusDtoFile statusDto)
         {
             try
             {

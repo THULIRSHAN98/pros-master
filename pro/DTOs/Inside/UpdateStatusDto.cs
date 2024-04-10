@@ -1,6 +1,6 @@
 namespace pro.DTOs
 {
-    public class UpdateStatusDto
+    public class UpdateStatusDtoFile
     {
         public bool Status { get; set; }
     }
