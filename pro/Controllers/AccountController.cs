@@ -27,10 +27,10 @@ namespace pro.Controllers
         private readonly UserManager<User> _userManager;
         private readonly EmailService _emailService;
         private readonly IConfiguration _config;
-      
 
-        public AccountController(JWTService jwtService, 
-            SignInManager<User> signInManager, 
+
+        public AccountController(JWTService jwtService,
+            SignInManager<User> signInManager,
             UserManager<User> userManager,
             EmailService emailService,
             IConfiguration config)
@@ -40,8 +40,7 @@ namespace pro.Controllers
             _userManager = userManager;
             _emailService = emailService;
             _config = config;
-          
-           
+
         }
 
         [Authorize]
@@ -111,7 +110,7 @@ namespace pro.Controllers
                 LastName = model.LastName.ToLower(),
                 UserName = model.Email.ToLower(),
                 Email = model.Email.ToLower(),
-                EmailConfirmed = true ,// Set email confirmed flag to true
+                EmailConfirmed = true,// Set email confirmed flag to true
                 Status = model.Status
             };
 
@@ -124,6 +123,32 @@ namespace pro.Controllers
 
             return Ok(new JsonResult(new { title = "Account Created", message = "Your account has been created" }));
         }
+
+        [HttpPut("update-status/{userId}")]
+        public async Task<IActionResult> UpdateUserStatus(string userId, UpdateStatusDto model)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            // Update the user's status
+            user.Status = model.Status;
+
+            try
+            {
+                // Update the user in the database
+                await _userManager.UpdateAsync(user);
+                return Ok(new { message = "User status updated successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
 
 
 
@@ -148,7 +173,7 @@ namespace pro.Controllers
 
                 return BadRequest("Invalid token. Please try again");
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return BadRequest("Invalid token. Please try again");
             }
@@ -172,7 +197,7 @@ namespace pro.Controllers
 
                 return BadRequest("Failed to send email. PLease contact admin");
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return BadRequest("Failed to send email. PLease contact admin");
             }
@@ -197,7 +222,7 @@ namespace pro.Controllers
 
                 return BadRequest("Failed to send email. Please contact admin");
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return BadRequest("Failed to send email. Please contact admin");
             }
@@ -223,7 +248,7 @@ namespace pro.Controllers
 
                 return BadRequest("Invalid token. Please try again");
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return BadRequest("Invalid token. Please try again");
             }
@@ -234,8 +259,8 @@ namespace pro.Controllers
         {
             return new UserDto
             {
-                FirstName= user.FirstName,
-                LastName= user.LastName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
                 JWT = await _jwtService.CreateJWT(user),
             };
         }
@@ -280,7 +305,8 @@ namespace pro.Controllers
             return await _emailService.SendEmailAsync(emailSend);
         }
 
-      
+
         #endregion
     }
+
 }

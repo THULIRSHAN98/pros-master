@@ -31,7 +31,6 @@ namespace pro.Controllers
         {
             try
             {
-                // Ensure the ModelState is valid
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
@@ -60,8 +59,9 @@ namespace pro.Controllers
                     FilePath = fileUploadRequest.FilePath,
                     FileSize = fileUploadRequest.FileSize,
                     ContentType = fileUploadRequest.ContentType,
-                    Status = fileUploadRequest.Status, // Set the status based on user input
-                    User = user // Assign the user to the file upload response
+                    Status = fileUploadRequest.Status,
+                    PositionId = fileUploadRequest.PositionId,
+                    User = user
                 };
 
                 // Add the new file upload response to the database
@@ -100,5 +100,40 @@ namespace pro.Controllers
             }
         }
 
+        [Authorize]
+        [HttpPut("{id}/status")]
+        public async Task<ActionResult> UpdateStatus(int id, UpdateStatusDto statusDto)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var fileUploadResponse = await _context.FileUploadResponses.FindAsync(id);
+
+                if (fileUploadResponse == null)
+                {
+                    return NotFound("File upload response not found.");
+                }
+
+                if (fileUploadResponse.UserId != userId)
+                {
+                    return Unauthorized("You do not have permission to update the status of this file upload response.");
+                }
+
+                // Update the status
+                fileUploadResponse.Status = statusDto.Status;
+
+                _context.FileUploadResponses.Update(fileUploadResponse);
+                await _context.SaveChangesAsync();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                // Log error
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
     }
+
 }
+
